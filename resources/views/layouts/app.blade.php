@@ -442,22 +442,160 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            /* Mobile Table Styles - Convert to Cards */
+            .table-container {
+                overflow: visible;
+            }
+
             .orders-table {
+                display: none;
+                /* Hide table on mobile */
+            }
+
+            /* Mobile card view */
+            .mobile-orders {
+                display: block;
+            }
+
+            .mobile-order-card {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 15px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-order-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 10px;
+                font-weight: 600;
+            }
+
+            .mobile-order-id {
+                color: #2563eb;
+                font-size: 16px;
+            }
+
+            .mobile-order-status {
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            .mobile-order-details {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                margin-bottom: 10px;
                 font-size: 14px;
             }
 
-            .orders-table th,
-            .orders-table td {
-                padding: 8px;
+            .mobile-order-detail {
+                display: flex;
+                flex-direction: column;
             }
 
-            .detail-grid {
+            .mobile-order-label {
+                font-weight: 600;
+                color: #6b7280;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 2px;
+            }
+
+            .mobile-order-value {
+                color: #374151;
+            }
+
+            .mobile-order-actions {
+                text-align: center;
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #f3f4f6;
+            }
+
+            .mobile-order-actions .btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }            .detail-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Mobile Modal Items Table */
+            .items-table {
+                display: none; /* Hide table on mobile */
+            }
+
+            .mobile-items {
+                display: block;
+            }
+
+            .mobile-item-card {
+                background: #f9fafb;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .mobile-item-header {
+                font-weight: 600;
+                color: #374151;
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+
+            .mobile-item-details {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                font-size: 13px;
+            }
+
+            .mobile-item-detail {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-item-label {
+                font-weight: 600;
+                color: #6b7280;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 2px;
+            }
+
+            .mobile-item-value {
+                color: #374151;
+            }
+
+            .mobile-item-total {
+                grid-column: 1 / -1;
+                margin-top: 6px;
+                padding-top: 6px;
+                border-top: 1px solid #d1d5db;
+                font-weight: 600;
+                color: #111827;
+                text-align: right;
             }
 
             .pagination {
                 flex-direction: column;
                 gap: 10px;
+            }
+        }
+
+        /* Desktop - Hide mobile views */
+        @media (min-width: 769px) {
+            .mobile-orders,
+            .mobile-items {
+                display: none;
             }
         }
     </style>

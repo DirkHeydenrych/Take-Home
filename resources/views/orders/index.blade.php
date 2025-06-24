@@ -110,6 +110,7 @@
         <h3>Orders</h3>
     </div>
     <div class="table-container">
+        <!-- Desktop Table View -->
         <table class="orders-table">
             <thead>
                 <tr>
@@ -129,6 +130,11 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Mobile Card View -->
+        <div class="mobile-orders" id="mobile-orders">
+            <div class="loading" style="text-align: center; padding: 20px;">Loading orders...</div>
+        </div>
     </div>
     <div class="pagination" id="pagination-container">
         <div class="pagination-info" id="pagination-info">-</div>
@@ -343,15 +349,17 @@
                 // Don't show error for statistics as it's not critical
             }
         }
-
         renderOrders(orders) {
             const tbody = document.getElementById('orders-tbody');
+            const mobileContainer = document.getElementById('mobile-orders');
 
             if (orders.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" class="loading">No orders found</td></tr>';
+                mobileContainer.innerHTML = '<div class="loading" style="text-align: center; padding: 20px;">No orders found</div>';
                 return;
             }
 
+            // Desktop table view
             tbody.innerHTML = orders.map(order => {
                 const statusClass = `status-${order.status.toLowerCase()}`;
                 const paidClass = order.is_paid ? 'paid-yes' : 'paid-no';
@@ -373,6 +381,54 @@
                             </button>
                         </td>
                     </tr>
+                `;
+            }).join('');
+
+            // Mobile card view
+            mobileContainer.innerHTML = orders.map(order => {
+                const statusClass = `status-${order.status.toLowerCase()}`;
+                const paidClass = order.is_paid ? 'paid-yes' : 'paid-no';
+                const paidText = order.is_paid ? 'Yes' : 'No';
+                const createdDate = new Date(order.created_at).toLocaleDateString();
+
+                return `
+                    <div class="mobile-order-card" onclick="orderViewer.showOrderDetails(${order.id})" data-order-id="${order.id}">
+                        <div class="mobile-order-header">
+                            <div class="mobile-order-id">#${order.id}</div>
+                            <div class="mobile-order-status status-badge ${statusClass}">${order.status}</div>
+                        </div>
+                        
+                        <div class="mobile-order-details">
+                            <div class="mobile-order-detail">
+                                <div class="mobile-order-label">Customer</div>
+                                <div class="mobile-order-value">${this.escapeHtml(order.customer_name)}</div>
+                            </div>
+                            <div class="mobile-order-detail">
+                                <div class="mobile-order-label">Total</div>
+                                <div class="mobile-order-value">$${parseFloat(order.total).toFixed(2)}</div>
+                            </div>
+                            <div class="mobile-order-detail">
+                                <div class="mobile-order-label">Email</div>
+                                <div class="mobile-order-value">${this.escapeHtml(order.customer_email)}</div>
+                            </div>
+                            <div class="mobile-order-detail">
+                                <div class="mobile-order-label">Payment Status</div>
+                                <div class="mobile-order-value">
+                                    <span class="paid-badge ${paidClass}">${paidText}</span>
+                                </div>
+                            </div>
+                            <div class="mobile-order-detail" style="grid-column: 1 / -1;">
+                                <div class="mobile-order-label">Created Date</div>
+                                <div class="mobile-order-value">${createdDate}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mobile-order-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); orderViewer.showOrderDetails(${order.id})">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
                 `;
             }).join('');
         }
@@ -484,9 +540,9 @@
                             <div class="detail-label">Created Date</div>
                             <div class="detail-value">${createdDate}</div>
                         </div>
-                    </div>
-
-                    <h4>Order Items</h4>
+                    </div>                    <h4>Order Items</h4>
+                    
+                    <!-- Desktop Table View -->
                     <table class="items-table">
                         <thead>
                             <tr>
@@ -509,6 +565,33 @@
                             `).join('')}
                         </tbody>
                     </table>
+                    
+                    <!-- Mobile Card View -->
+                    <div class="mobile-items">
+                        ${order.order_items.map(item => `
+                            <div class="mobile-item-card">
+                                <div class="mobile-item-header">${this.escapeHtml(item.product_name)}</div>
+                                <div class="mobile-item-details">
+                                    <div class="mobile-item-detail">
+                                        <div class="mobile-item-label">Description</div>
+                                        <div class="mobile-item-value">${this.escapeHtml(item.product_description || '-')}</div>
+                                    </div>
+                                    <div class="mobile-item-detail">
+                                        <div class="mobile-item-label">Quantity</div>
+                                        <div class="mobile-item-value">${item.quantity}</div>
+                                    </div>
+                                    <div class="mobile-item-detail">
+                                        <div class="mobile-item-label">Unit Price</div>
+                                        <div class="mobile-item-value">$${parseFloat(item.price).toFixed(2)}</div>
+                                    </div>
+                                    <div class="mobile-item-detail">
+                                        <div class="mobile-item-label">Line Total</div>
+                                        <div class="mobile-item-value">$${parseFloat(item.total).toFixed(2)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `;
         }
